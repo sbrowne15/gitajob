@@ -10,6 +10,6 @@ import './css/styles.scss';
 ReactDOM.render(
   <Provider store={store}>
     <HomePage />
-  </Provider>,
+  </Provider>, // Provider from react-redux "connects" store to HomePage and all children
   document.getElementById('root')
 );
