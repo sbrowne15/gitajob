@@ -32,7 +32,7 @@ export const initiateGetJobs = (data) => {
 };
 
 // When Data Received, dispatch to redux store using jobs reducer
-export const setjobs = (jobs) => ({
+export const setJobs = (jobs) => ({
     type: 'SET_JOBS',
     jobs
 });
