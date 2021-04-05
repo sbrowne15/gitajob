@@ -11,11 +11,12 @@ const JobItem = (props) => {
         location,
         title,
         company_logo,
-        index
+        index,
+        onItemClick
     } = props;
 
     return (
-        <div className="job-item" index={index + 1}>
+        <div className="job-item" index={index + 1} onClick={() => onItemClick(id)}>
             <div className="company-logo">
                 <img src={company_logo} alt={company} width="100" height="100" />
             </div>
