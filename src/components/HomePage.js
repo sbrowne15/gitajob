@@ -80,7 +80,7 @@ const HomePage = (props) => {
                 <Results />
             </div>
             <div className={`${page === 'home' && 'hide'}`}>
-                <JobDetails />
+                {page === 'details' && <JobDetails />}
             </div>
         </JobsContext.Provider>
     );

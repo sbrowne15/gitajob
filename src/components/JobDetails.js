@@ -14,6 +14,11 @@ const JobDetails = () => {
         how_to_apply
     } = details;
 
+    // Set Scroll to top of page on changes
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     // Display job description and details
     return (
         <div className="job-details">
