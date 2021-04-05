@@ -7,6 +7,7 @@ import Header from './Header';
 import Search from './Search';
 import Results from './Results';
 import JobDetails from './JobDetails';
+import JobsContext from '../context/jobs';
 
 //Declare State variables and have useState hook store API result to array, flag for loading, and object for error
 
@@ -57,24 +58,32 @@ const HomePage = (props) => {
         jobDetails = results.find((job) => job.id === jobId);
     }
 
-     return (
-        <div>
+    const value = {
+        results,
+        details: jobDetails,
+        onSearch: handleSearch,
+        onItemClick: handleItemClick,
+        onResetPage: handleResetPage
+    };
+
+    return (
+        <JobsContext.Provider value={value}>
             <div className={`${page === 'details' && 'hide'}`}>
-                <Header />
-                <Search onSearch={handleSearch} />
+                <Header /> 
+                <Search />
                 {!_.isEmpty(errors) && (
-                <div className="errorMsg">
-                    <p>{errors.error}</p>
-                </div>
+                    <div className="errorMsg">
+                        <p>{errors.error}</p>
+                    </div>
                 )}
-                {isLoading && <p className="loading">Loading...</p>}
-                <Results results={results} onItemClick={handleItemClick} />
+                {isLoading && <p className="loading">Loading...</p>} 
+                <Results />
             </div>
             <div className={`${page === 'home' && 'hide'}`}>
-                <JobDetails details={jobDetails} onResetPage={handleResetPage} />
+                <JobDetails />
             </div>
-        </div>
-  );
+        </JobsContext.Provider>
+    );
 };
 
 //Make data available in props

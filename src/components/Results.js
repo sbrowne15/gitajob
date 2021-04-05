@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import JobItem from './JobItem';
+import JobsContext from '../context/jobs';
 // loop through results array and pass data into JobItem for display
-const Results = ({ results, onItemClick }) => {
+const Results = () => {
+    const { results } = useContext(JobsContext);
     return (
         <div className="search-results">
             {results.map((job, index) => (
                 <JobItem 
                     key={job.id} 
                     {...job} 
-                    index={index}
-                    onItemClick={onItemClick} 
+                    index={index}                     
                 />
             ))}
         </div>

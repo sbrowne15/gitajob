@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Form, FormGroup, Label, Input, Button, Row, Col } from 'reactstrap';
+import JobsContext from '../context/jobs';
 
 const Search = (props) => {
+    const { onSearch } = useContext(JobsContext);
     const [state, setState] = useState({
         description: '',
         location: '',
@@ -20,7 +22,7 @@ const Search = (props) => {
     const handleSearch = (event) => {
         event.preventDefault();
         console.log(state);
-        props.onSearch(state);
+        onSearch(state);
     };
 
     return (
@@ -39,7 +41,7 @@ const Search = (props) => {
                         </FormGroup>
                     </Col>
                     <Col>
-                    <FormGroup controlId="location">
+                        <FormGroup controlId="location">
                             <Input // Input Field for Location to Search
                                 type="text"
                                 name="location"
@@ -61,7 +63,7 @@ const Search = (props) => {
                             <Input // Checkbox to search only for full-time jobs Cheated to get spacing between label and checkbox will fix later
                                 type="checkbox"
                                 name="full_time"
-                                className="full-time_checkbox"                                
+                                className="full-time-checkbox"                                                              
                                 checked={state.full_time}
                                 onChange={handleInputChange}
                             />

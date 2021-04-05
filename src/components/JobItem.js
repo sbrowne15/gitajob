@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import moment from 'moment';  // Date manipulation to show Posting Age on line 31
+import JobsContext from '../context/jobs';
 
 // Display data coming from API
 const JobItem = (props) => {
+    const { onItemClick } = useContext(JobsContext);
     const {
         id,
         type,
@@ -11,8 +13,7 @@ const JobItem = (props) => {
         location,
         title,
         company_logo,
-        index,
-        onItemClick
+        index
     } = props;
 
     return (
