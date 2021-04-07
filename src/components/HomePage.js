@@ -8,6 +8,7 @@ import Search from './Search';
 import Results from './Results';
 import JobDetails from './JobDetails';
 import JobsContext from '../context/jobs';
+import Loader from './Loader';
 
 //Declare State variables and have useState hook store API result to array, flag for loading, and object for error
 
@@ -19,6 +20,7 @@ const HomePage = (props) => {
     const [page, setPage] = useState('home');
     const [pageNumber, setPageNumber] = useState(1);
     const [selection, setSelection] = useState(null);
+    const [hideLoadMore, setHideLoadMore] = useState(false);
 
     //useEffect hook gets list of jobs and any errors
     useEffect(() => {
@@ -40,7 +42,12 @@ const HomePage = (props) => {
         setIsLoading(true);
         dispatch(initiateGetJobs({ description, location, full_time, page }, isLoadMore)
         )
-            .then(() => {
+            .then((response) => {
+                if (response && response.jobs.length === 0) {
+                    setHideLoadMore(true);
+                } else {
+                    setHideLoadMore(false);
+                }
                 setIsLoading(false);
             })
             .catch(() => setIsLoading(false));
@@ -81,6 +88,7 @@ const HomePage = (props) => {
 
     return (
         <JobsContext.Provider value={value}>
+            <Loader show={isLoading}>Loading...</Loader>
             <div className={`${page === 'details' && 'hide'}`}>
                 <Header /> <Search />
                 {!_.isEmpty(errors) && (
@@ -88,9 +96,8 @@ const HomePage = (props) => {
                         <p>{errors.error}</p>
                     </div>
                 )}
-                <Results />
-                {isLoading && <p className="loading">Loading...</p>} 
-                {results.length > 0 && _.isEmpty(errors) && (
+                <Results />                 
+                {results.length > 0 && _.isEmpty(errors) && !hideLoadMore && (
                     <div
                         className="load-more"
                         onClick={isLoading ? null : handleLoadMore}
