@@ -1,8 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import JobsContext from '../context/jobs';
 
 const JobDetails = () => {
     const { details, onResetPage } = useContext(JobsContext);
+
+     // Set Scroll to top of page on changes
+     useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
     const {
         type,
         title,
@@ -13,11 +18,6 @@ const JobDetails = () => {
         company_logo,
         how_to_apply
     } = details;
-
-    // Set Scroll to top of page on changes
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
 
     // Display job description and details
     return (

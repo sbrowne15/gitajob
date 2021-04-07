@@ -4,7 +4,7 @@ import { BASE_API_URL } from '../utils/constants';
 import { setErrors } from './errors';
 
 // Get JSON Job Data with API call to Express Server in Node.
-export const initiateGetJobs = (data) => {
+export const initiateGetJobs = (data, isLoadMore) => {
     return async (dispatch) => {
         try {
             let { description, full_time, location, page } = data;
@@ -25,7 +25,11 @@ export const initiateGetJobs = (data) => {
                 (a, b) =>
                     moment(new Date(b.created_at)) - moment(new Date(a.created_at))
             );
-            return dispatch(setJobs(sortedJobs));
+            if (isLoadMore) {
+                return dispatch(setLoadMoreJobs(sortedJobs));
+            } else {
+                return dispatch(setJobs(sortedJobs));
+            }
         }   catch (error) {
             error.response && dispatch(setErrors(error.response.data));
         }

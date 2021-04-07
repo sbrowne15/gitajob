@@ -17,6 +17,8 @@ const HomePage = (props) => {
     const [isLoading, setIsLoading] = useState(false);
     const [jobId, setJobId] = useState(-1);
     const [page, setPage] = useState('home');
+    const [pageNumber, setPageNumber] = useState(1);
+    const [selection, setSelection] = useState(null);
 
     //useEffect hook gets list of jobs and any errors
     useEffect(() => {
@@ -30,9 +32,14 @@ const HomePage = (props) => {
     const loadJobs = (selection) => {
         const { dispatch } = props;
         const { description, location, full_time, page = 1 } = selection;
+        let isLoadMore = false;
+        if (selection.hasOwnProperty('page')) {
+            isLoadMore = true;
+        }
         dispatch(resetErrors());
         setIsLoading(true);
-        dispatch(initiateGetJobs({ description, location, full_time, page }))
+        dispatch(initiateGetJobs({ description, location, full_time, page }, isLoadMore)
+        )
             .then(() => {
                 setIsLoading(false);
             })
@@ -41,6 +48,7 @@ const HomePage = (props) => {
 
     const handleSearch = (selection) => {
         loadJobs(selection);
+        setSelection(selection);
     };
 
     const handleItemClick = (jobId) => {
@@ -50,6 +58,11 @@ const HomePage = (props) => {
 
     const handleResetPage = () => {
         setPage('home');
+    };
+
+    const handleLoadMore = () => {
+        loadJobs({ ...selection, page: pageNumber + 1});
+        setPageNumber(pageNumber + 1);
     };
 
     // When details page clicked, filter job from results array and pass to JobDetails component
@@ -69,15 +82,27 @@ const HomePage = (props) => {
     return (
         <JobsContext.Provider value={value}>
             <div className={`${page === 'details' && 'hide'}`}>
-                <Header /> 
-                <Search />
+                <Header /> <Search />
                 {!_.isEmpty(errors) && (
                     <div className="errorMsg">
                         <p>{errors.error}</p>
                     </div>
                 )}
-                {isLoading && <p className="loading">Loading...</p>} 
                 <Results />
+                {isLoading && <p className="loading">Loading...</p>} 
+                {results.length > 0 && _.isEmpty(errors) && (
+                    <div
+                        className="load-more"
+                        onClick={isLoading ? null : handleLoadMore}
+                    >
+                        <button
+                            disabled={isLoading}
+                            className={`${isLoading ? 'disabled' : ''}`}
+                        >
+                            See More Jobs
+                        </button>
+                    </div>
+                )}
             </div>
             <div className={`${page === 'home' && 'hide'}`}>
                 {page === 'details' && <JobDetails />}
