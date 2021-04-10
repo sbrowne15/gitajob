@@ -20,7 +20,7 @@ const Loader = (props) => {
         }
     }, [loader, props.show]);
 
-    return ReactDOM.createPortal(props.children, node);
-};
+    return ReactDOM.createPortal(props.children, node); // Because props.children is used anything between Loader tags on HomePage will be displayed.
+};                                                      // This is because Loader sits on top of the App div. i.e. It is a separate div in public/index.html
 
 export default Loader;
